@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { expect, should } = require('chai');
+const { expect } = require('chai');
 const { StatusCodes } = require('http-status-codes');
 
 const booksEndpoint = 'http://127.0.0.1:8080/books';
@@ -48,7 +48,6 @@ describe('Verifying the creation of a book', () => {
 
         afterEach(async () => {
             await axios.delete(booksEndpoint+'/'+assignedId);
-            console.log("delete "+assignedId);
         });
         
     });
