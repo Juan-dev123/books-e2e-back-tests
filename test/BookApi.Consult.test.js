@@ -40,12 +40,9 @@ describe('Verifying the consult of books', () => {
         for (let i = 0; i < booksToAdd.length; i++){
             await axios.post(booksEndpoint, booksToAdd[i]);
         }
-
         const response = await axios.get(booksEndpoint);
         let consultedBooks = response.data;
-
         const mapOfIndex = {};
-
         booksToAdd.forEach((bookToAdd, indexBookToAdd) => {
             consultedBooks.forEach((consultedBook, indexConsultedBook) => {
                 if(bookToAdd.author === consultedBook.author && bookToAdd.name === consultedBook.name){
@@ -56,7 +53,6 @@ describe('Verifying the consult of books', () => {
 
         expect(response.status).to.equal(StatusCodes.OK);
         expect(consultedBooks.length).equal(booksToAdd.length);
-
         for (let i = 0; i < booksToAdd.length; i++){
             expect(consultedBooks[mapOfIndex['bookToAdd'+i]].name).equal(booksToAdd[i].name);
             expect(consultedBooks[mapOfIndex['bookToAdd'+i]].author).equal(booksToAdd[i].author);

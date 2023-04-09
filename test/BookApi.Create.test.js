@@ -27,11 +27,12 @@ describe('Verifying the creation of a book', () => {
         it('should create a book when given all the data', async () => {
             const response = await axios.post(booksEndpoint, book);
             let bookDTO = response.data;
+            assignedId = bookDTO.id;
+
             expect(response.status).to.equal(StatusCodes.OK);
             expect(bookDTO.id).to.not.be.null;
             expect(bookDTO.name).to.equal(book.name);
             expect(bookDTO.author).to.equal(book.author);
-            assignedId = bookDTO.id;
         });
 
         //The provided book id does not matter because the id that is assigned to the book is created in the controller
@@ -39,11 +40,12 @@ describe('Verifying the creation of a book', () => {
             book.id = null;
             const response = await axios.post(booksEndpoint, book);
             let bookDTO = response.data;
+            assignedId = bookDTO.id;
+
             expect(response.status).to.equal(StatusCodes.OK);
             expect(bookDTO.id).to.not.be.null;
             expect(bookDTO.name).to.equal(book.name);
             expect(bookDTO.author).to.equal(book.author);
-            assignedId = bookDTO.id;
         });
 
         afterEach(async () => {
@@ -57,24 +59,28 @@ describe('Verifying the creation of a book', () => {
             it('shoud not create a book when the name is null', async () => {
                 book.name = null;
                 const response = await axios.post(booksEndpoint, book);
+
                 expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
             });
     
             it('shoud not create a book when the name is empty', async () => {
                 book.name = "";
                 const response = await axios.post(booksEndpoint, book);
+
                 expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
             });
     
             it('shoud not create a book when the author is null', async () => {
                 book.author = null;
                 const response = await axios.post(booksEndpoint, book);
+
                 expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
             });
     
             it('shoud not create a book when the author is empty', async () => {
                 book.author = "";
                 const response = await axios.post(booksEndpoint, book);
+
                 expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
             });
         });
@@ -88,6 +94,8 @@ describe('Verifying the creation of a book', () => {
                 const responseOfBookCopy = await axios.post(booksEndpoint, book);
                 const responseOfBooksAfter = await axios.get(booksEndpoint);
                 let numOfBooksAfterTryingToAddTheBookCopy = responseOfBooksAfter.data.length;
+
+                expect(responseOfOriginalBook.status).to.equal(StatusCodes.OK);
                 expect(responseOfBookCopy.status).to.equal(StatusCodes.BAD_REQUEST);
                 expect(numOfBooksBeforeTryingToAddTheBookCopy).to.equal(numOfBooksAfterTryingToAddTheBookCopy);
             });
