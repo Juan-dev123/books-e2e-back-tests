@@ -76,9 +76,11 @@ describe('Verifying the creation of a book', () => {
         it('should not create a book when the book already exists', async () => {
             const responseOfOriginalBook = await axios.post(booksEndpoint, book);
             assignedId = responseOfOriginalBook.data.id;
-            let numOfBooksBeforeTryingToAddTheBookCopy = await axios.get(booksEndpoint).length;
+            const responseOfBooksBefore = await axios.get(booksEndpoint);
+            let numOfBooksBeforeTryingToAddTheBookCopy = responseOfBooksBefore.data.length;
             const responseOfBookCopy = await axios.post(booksEndpoint, book);
-            let numOfBooksAfterTryingToAddTheBookCopy = await axios.get(booksEndpoint).length;
+            const responseOfBooksAfter = await axios.get(booksEndpoint);
+            let numOfBooksAfterTryingToAddTheBookCopy = responseOfBooksAfter.data.length;
             expect(responseOfBookCopy.status).to.equal(StatusCodes.BAD_REQUEST);
             expect(numOfBooksBeforeTryingToAddTheBookCopy).to.equal(numOfBooksAfterTryingToAddTheBookCopy);
         });
