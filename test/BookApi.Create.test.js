@@ -45,49 +45,57 @@ describe('Verifying the creation of a book', () => {
             expect(bookDTO.author).to.equal(book.author);
             assignedId = bookDTO.id;
         });
+
+        afterEach(async () => {
+            await axios.delete(booksEndpoint+'/'+assignedId);
+            console.log("delete "+assignedId);
+        });
         
     });
 
     describe('Unhappy path', () => {
-        it('shoud not create a book when the name is null', async () => {
-            book.name = null;
-            const response = await axios.post(booksEndpoint, book);
-            expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
+        describe('The data is incomplete', () => {
+            it('shoud not create a book when the name is null', async () => {
+                book.name = null;
+                const response = await axios.post(booksEndpoint, book);
+                expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
+            });
+    
+            it('shoud not create a book when the name is empty', async () => {
+                book.name = "";
+                const response = await axios.post(booksEndpoint, book);
+                expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
+            });
+    
+            it('shoud not create a book when the author is null', async () => {
+                book.author = null;
+                const response = await axios.post(booksEndpoint, book);
+                expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
+            });
+    
+            it('shoud not create a book when the author is empty', async () => {
+                book.author = "";
+                const response = await axios.post(booksEndpoint, book);
+                expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
+            });
         });
+        
+        describe('The data is repeated', () => {
+            it('should not create a book when the book already exists', async () => {
+                const responseOfOriginalBook = await axios.post(booksEndpoint, book);
+                assignedId = responseOfOriginalBook.data.id;
+                const responseOfBooksBefore = await axios.get(booksEndpoint);
+                let numOfBooksBeforeTryingToAddTheBookCopy = responseOfBooksBefore.data.length;
+                const responseOfBookCopy = await axios.post(booksEndpoint, book);
+                const responseOfBooksAfter = await axios.get(booksEndpoint);
+                let numOfBooksAfterTryingToAddTheBookCopy = responseOfBooksAfter.data.length;
+                expect(responseOfBookCopy.status).to.equal(StatusCodes.BAD_REQUEST);
+                expect(numOfBooksBeforeTryingToAddTheBookCopy).to.equal(numOfBooksAfterTryingToAddTheBookCopy);
+            });
 
-        it('shoud not create a book when the name is empty', async () => {
-            book.name = "";
-            const response = await axios.post(booksEndpoint, book);
-            expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
-        });
-
-        it('shoud not create a book when the author is null', async () => {
-            book.author = null;
-            const response = await axios.post(booksEndpoint, book);
-            expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
-        });
-
-        it('shoud not create a book when the author is empty', async () => {
-            book.author = "";
-            const response = await axios.post(booksEndpoint, book);
-            expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
-        });
-
-        it('should not create a book when the book already exists', async () => {
-            const responseOfOriginalBook = await axios.post(booksEndpoint, book);
-            assignedId = responseOfOriginalBook.data.id;
-            const responseOfBooksBefore = await axios.get(booksEndpoint);
-            let numOfBooksBeforeTryingToAddTheBookCopy = responseOfBooksBefore.data.length;
-            const responseOfBookCopy = await axios.post(booksEndpoint, book);
-            const responseOfBooksAfter = await axios.get(booksEndpoint);
-            let numOfBooksAfterTryingToAddTheBookCopy = responseOfBooksAfter.data.length;
-            expect(responseOfBookCopy.status).to.equal(StatusCodes.BAD_REQUEST);
-            expect(numOfBooksBeforeTryingToAddTheBookCopy).to.equal(numOfBooksAfterTryingToAddTheBookCopy);
+            afterEach(async () => {
+                await axios.delete(booksEndpoint+'/'+assignedId);
+            });
         });
     });
-
-    afterEach(async () => {
-        await axios.delete(booksEndpoint+'/'+assignedId);
-    });
-
 });
