@@ -83,7 +83,7 @@ describe('Verifying the creation of a book', () => {
             let numOfBooksBeforeTryingToAddTheBookCopy = await axios.get(booksEndpoint).length;
             const responseOfBookCopy = await axios.post(booksEndpoint, book);
             let numOfBooksAfterTryingToAddTheBookCopy = await axios.get(booksEndpoint).length;
-            expect(response.status).to.equal(StatusCodes.BAD_REQUEST);
+            expect(responseOfBookCopy.status).to.equal(StatusCodes.BAD_REQUEST);
             expect(numOfBooksBeforeTryingToAddTheBookCopy).to.equal(numOfBooksAfterTryingToAddTheBookCopy);
         });
     })
