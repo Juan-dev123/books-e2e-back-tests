@@ -20,14 +20,10 @@ describe('Verifying the creation of a book', () => {
         }
     });
 
+    let assignedId;
+
     describe('Happy path', () => {
 
-        let assignedId;
-
-        afterEach(async () => {
-            await axios.delete(booksEndpoint+'/'+assignedId);
-        });
-        
         it('should create a book when given all the data', async () => {
             const response = await axios.post(booksEndpoint, book);
             let bookDTO = response.data;
@@ -86,6 +82,10 @@ describe('Verifying the creation of a book', () => {
             expect(responseOfBookCopy.status).to.equal(StatusCodes.BAD_REQUEST);
             expect(numOfBooksBeforeTryingToAddTheBookCopy).to.equal(numOfBooksAfterTryingToAddTheBookCopy);
         });
-    })
+    });
+
+    afterEach(async () => {
+        await axios.delete(booksEndpoint+'/'+assignedId);
+    });
 
 });
