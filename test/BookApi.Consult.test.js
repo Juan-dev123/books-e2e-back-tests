@@ -2,7 +2,7 @@ const axios = require('axios');
 const { expect } = require('chai');
 const { StatusCodes } = require('http-status-codes');
 
-const booksEndpoint = 'http://127.0.0.1:8080/books';
+const booksEndpoint = 'https://bookbackjuans-378tech.b4a.run//books';
 
 describe('Verifying the consult of books', () => {
     let initialBooks;

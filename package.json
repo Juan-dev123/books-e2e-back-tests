@@ -4,7 +4,7 @@
   "description": "E2E testing for the books backend",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha -t 60000"
   },
   "repository": {
     "type": "git",
