@@ -19,5 +19,6 @@ jobs:
     - name: Run tests
       run: |
         if [ -d "test" ] && [ $(find test -name "*.js" | wc -l) -gt 0 ]; then
+          npm install axios
           npm test
         fi
