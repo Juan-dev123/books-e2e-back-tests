@@ -2,7 +2,7 @@ const axios = require('axios');
 const { expect } = require('chai');
 const { StatusCodes } = require('http-status-codes');
 
-const booksEndpoint = 'https://bookbackjuans-378tech.b4a.run//books';
+const booksEndpoint = 'https://books-back-juans.azurewebsites.net/books';
 
 describe('Verifying the consult of books', () => {
     let initialBooks;
